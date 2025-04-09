@@ -41,15 +41,76 @@ const displayController = (function() {
 
     const start = document.querySelector(".button .start");
     const tile = document.querySelectorAll(`.tile`);
-    
+
+    let score1 = 0;
+    let score2 = 0;
+    let move1 = 0;
+    let move2 = 0;
+            
     start.addEventListener("click", () => {
         start.classList.toggle("restart");
+
         if (start.classList.contains("restart")) {
+            let rand = Math.floor(Math.random()*2);
+            if (rand === 0) {
+                assignValue("player1");
+                document.querySelector(`.player1`).style.boxShadow = "-10px 10px 18px black";
+                document.querySelector(`.player2`).style.boxShadow = "none";
+                document.querySelector(`.player1`).style.position = "relative";
+                document.querySelector(`.player1`).style.bottom = "5px";
+                document.querySelector(`.player1`).style.left = "5px";
+                document.querySelector(`.player2`).style.position = "relative";
+                document.querySelector(`.player2`).style.bottom = "0";
+                document.querySelector(`.player2`).style.left = "0";
+                document.querySelector(`.player1`).style.transition = "box-shadow 0.2s ease-in-out, bottom 0.2s ease-in-out, left 0.2s ease-in-out";
+                document.querySelector(`.player2`).style.transition = "box-shadow 0.2s ease-in-out, bottom 0.2s ease-in-out, left 0.2s ease-in-out";
+            } else {
+                assignValue("player2");
+                document.querySelector(`.player1`).style.boxShadow = "none";
+                document.querySelector(`.player2`).style.boxShadow = "-10px 10px 18px black";
+                document.querySelector(`.player1`).style.position = "relative";
+                document.querySelector(`.player1`).style.bottom = "0";
+                document.querySelector(`.player1`).style.left = "0";
+                document.querySelector(`.player2`).style.position = "relative";
+                document.querySelector(`.player2`).style.bottom = "5px";
+                document.querySelector(`.player2`).style.left = "5px";
+                document.querySelector(`.player1`).style.transition = "box-shadow 0.2s ease-in-out, bottom 0.2s ease-in-out, left 0.2s ease-in-out";
+                document.querySelector(`.player2`).style.transition = "box-shadow 0.2s ease-in-out, bottom 0.2s ease-in-out, left 0.2s ease-in-out";
+            }
             start.textContent = "RESET";
+            document.querySelector(".display").innerHTML = "";
         } else if (start.classList.contains("start")) {
             start.textContent = "START";
+            document.querySelector(`.player1`).style.boxShadow = "none";
+            document.querySelector(`.player2`).style.boxShadow = "none";
+            document.querySelector(`.player1`).style.position = "relative";
+            document.querySelector(`.player1`).style.bottom = "0";
+            document.querySelector(`.player1`).style.left = "0";
+            document.querySelector(`.player2`).style.position = "relative";
+            document.querySelector(`.player2`).style.bottom = "0";
+            document.querySelector(`.player2`).style.left = "0";
+            document.querySelector(`.player1`).style.transition = "box-shadow 0.2s ease-in-out, bottom 0.2s ease-in-out, left 0.2s ease-in-out";
+            document.querySelector(`.player2`).style.transition = "box-shadow 0.2s ease-in-out, bottom 0.2s ease-in-out, left 0.2s ease-in-out";
+            document.querySelector(".display").innerHTML = `<span class="display1">START TO PLAY</span>`;
         }
-        tile.forEach(item => item.textContent = "");
+
+        tile.forEach(item => {
+            item.textContent = "";
+            item.style.backgroundColor = "white";
+            item.style.transition = "background-color 0.2s ease-in-out";
+
+            if (item.classList.contains("greenX")) {
+                item.classList.remove("greenX");
+            } else if (item.classList.contains("greenO")) {
+                item.classList.remove("greenO");
+            }
+        });
+
+        move1 = 0;
+        move2 = 0;
+        document.querySelector(`.player1 .playercard .move`).textContent = "MOVES: 0"
+        document.querySelector(`.player2 .playercard .move`).textContent = "MOVES: 0"
+
         finish = !finish;
     });
 
@@ -59,7 +120,11 @@ const displayController = (function() {
 
         const playzone = document.querySelector(".playzone");
         console.log(player);
-            
+
+        const playerName =document.querySelector(`.${player} .playercard .name`)
+        const playerScore = document.querySelector(`.${player} .playercard .score`);
+        const playerMoves = document.querySelector(`.${player} .playercard .move`);
+
         if (player === "player1" && div.textContent === "" && !finish) {
             div.textContent = "X";
             div.style.color = "black";
@@ -68,10 +133,26 @@ const displayController = (function() {
                 start.classList.toggle("restart");
                 start.textContent = "RESTART";
                 finish = true;
-                assignValue("player2");
                 console.log("player1 Wins!");
+                score1++;
+                playerScore.textContent = `SCORE: ${score1}`;
+                move1++;
+                playerMoves.textContent = `MOVES: ${move1}`;
+                document.querySelector(".display").innerHTML = `<span class="display1">${playerName.textContent}</span><span>WINS!</span>`;
             } else {
                 assignValue("player2");
+                document.querySelector(`.player1`).style.boxShadow = "none";
+                document.querySelector(`.player2`).style.boxShadow = "-10px 10px 18px black";
+                document.querySelector(`.player1`).style.position = "relative";
+                document.querySelector(`.player1`).style.bottom = "0";
+                document.querySelector(`.player1`).style.left = "0";
+                document.querySelector(`.player2`).style.position = "relative";
+                document.querySelector(`.player2`).style.bottom = "5px";
+                document.querySelector(`.player2`).style.left = "5px";
+                document.querySelector(`.player1`).style.transition = "box-shadow 0.2s ease-in-out, bottom 0.2s ease-in-out, left 0.2s ease-in-out";
+                document.querySelector(`.player2`).style.transition = "box-shadow 0.2s ease-in-out, bottom 0.2s ease-in-out, left 0.2s ease-in-out";
+                move1++;
+                playerMoves.textContent = `MOVES: ${move1}`;
             }
         } else if (player === "player2" && div.textContent === "" && !finish) {
             div.textContent = "O";
@@ -81,24 +162,31 @@ const displayController = (function() {
                 start.classList.toggle("restart");
                 start.textContent = "RESTART";
                 finish = true;
-                assignValue("player1");
                 console.log("player2 Wins!");
+                score2++;
+                playerScore.textContent = `SCORE: ${score2}`;
+                move2++;
+                playerMoves.textContent = `MOVES: ${move2}`;
+                document.querySelector(".display").innerHTML = `<span class="display2">${playerName.textContent}</span><span>WINS!</span>`;
             } else {
                 assignValue("player1");
+                document.querySelector(`.player1`).style.boxShadow = "-10px 10px 18px black";
+                document.querySelector(`.player2`).style.boxShadow = "none";
+                document.querySelector(`.player1`).style.position = "relative";
+                document.querySelector(`.player1`).style.bottom = "5px";
+                document.querySelector(`.player1`).style.left = "5px";
+                document.querySelector(`.player2`).style.position = "relative";
+                document.querySelector(`.player2`).style.bottom = "0";
+                document.querySelector(`.player2`).style.left = "0";
+                document.querySelector(`.player1`).style.transition = "box-shadow 0.2s ease-in-out, bottom 0.2s ease-in-out, left 0.2s ease-in-out";
+                document.querySelector(`.player2`).style.transition = "box-shadow 0.2s ease-in-out, bottom 0.2s ease-in-out, left 0.2s ease-in-out";
+                move2++;
+                playerMoves.textContent = `MOVES: ${move2}`;
             }
         }
     };
 
     const strike = () => {
-        // const classA = Array.from(document.querySelectorAll(".board.A .tile"));
-        // const classB = Array.from(document.querySelectorAll(".board.B .tile"));
-        // const classC = Array.from(document.querySelectorAll(".board.C .tile"));
-        // const class1 = Array.from(document.querySelectorAll(".board.num1 .tile"));
-        // const class2 = Array.from(document.querySelectorAll(".board.num2 .tile"));
-        // const class3 = Array.from(document.querySelectorAll(".board.num3 .tile"));
-        // const classDL = Array.from(document.querySelectorAll(".board.diagonalLeft .tile"));
-        // const classDR = Array.from(document.querySelectorAll(".board.diagonalRight .tile"));
-
         const classArray = ["A", "B", "C", "num1", "num2", "num3", "diagonalLeft", "diagonalRight"];
         let value = true;
 
@@ -108,40 +196,29 @@ const displayController = (function() {
             const allSame = classItem.every(item => (item.textContent === classText && classText !== ""));
             
             if (allSame) {
+                const classItemValue = classItem;
+
+                classItemValue.forEach(item => {
+                    item.style.color = "white";
+                    item.style.transition = "color 0.2s ease-in-out";
+                    if (item.textContent === "X") {
+                        item.classList.add("greenX");
+                    } else if (item.textContent === "O") {
+                        item.classList.add("greenO");
+                    }
+                });
+
                 value = false;
                 break;
             }
         }
 
         if (!value) {
+            value = true;
             return true;
         } else {
             return false;
         }
-
-        // const classAText = classA[0].textContent;
-        // const classBText = classB[0].textContent;
-        // const classCText = classC[0].textContent;
-        // const class1Text = class1[0].textContent;
-        // const class2Text = class2[0].textContent;
-        // const class3Text = class3[0].textContent;
-        // const classDLText = classDL[0].textContent;
-        // const classDRText = classDR[0].textContent;
-
-        // const allSameA = classA.every(item => (item.textContent === classAText && classAText !== ""));
-        // const allSameB = classB.every(item => (item.textContent === classBText && classBText !== ""));
-        // const allSameC = classC.every(item => (item.textContent === classCText && classCText !== ""));
-        // const allSame1 = class1.every(item => (item.textContent === class1Text && class1Text !== ""));
-        // const allSame2 = class2.every(item => (item.textContent === class2Text && class2Text !== ""));
-        // const allSame3 = class3.every(item => (item.textContent === class3Text && class3Text !== ""));
-        // const allSameDL = classDL.every(item => (item.textContent === classDLText && classDLText !== ""));
-        // const allSameDR = classDR.every(item => (item.textContent === classDRText && classDRText !== ""));
-
-        // if (allSameA || allSameB || allSameC || allSame1 || allSame2 || allSame3 || allSameDL || allSameDR) {
-        //     return true;
-        // } else {
-        //     return false;
-        // }
     };
 
     return {
@@ -149,23 +226,10 @@ const displayController = (function() {
     };
 })();
 
-function players(name, score, moves) {
-    return {
-        name,
-        score,
-        moves,
-    };
-}
-
-function getName() {
-    //
-}
-
-function getScore() {
-    //
-}
-function getMoves(cellId) {
-    //
+function getName(player) {
+    const name = prompt(`${player} name:`);
+    const playerName = document.querySelector(`.${player} .playercard .name`);
+    playerName.textContent = name.toUpperCase();
 }
 
 function assignValue(player) {
@@ -179,7 +243,5 @@ function assignValue(player) {
     }
 }
 
-const player1 = players(`${getName()}`,`${getScore()}`, `${getMoves()}`);
-const player2 = players(`${getName()}`,`${getScore()}`, `${getMoves()}`);
-
-assignValue("player1");
+const player1 = getName("player1");
+const player2 = getName("player2");
