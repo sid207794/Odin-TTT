@@ -5,17 +5,35 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
     <script src="script.js" defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic-Tac-Toe</title>
 </head>
     <body>
+        <div class="header">
+            <div class="headText">TIC-TAC-TOE</div>
+        </div>
         <div class="parent">
-            <div class="player1"></div>
+            <div class="display"><span class="display1">START TO PLAY</span></div>
+            <div class="player1">
+                <div class="playercard">
+                    <div class="nameDiv"><div class="name"></div></div>
+                    <div class="scoreDiv"><div class="score">SCORE: 0</div></div>
+                    <div class="moveDiv"><div class="move">MOVES: 0</div></div>
+                </div>
+            </div>
             <div class="playzone"></div>
-            <div class="player2"></div>
+            <div class="player2">
+                <div class="playercard">
+                    <div class="nameDiv"><div class="name"></div></div>
+                    <div class="scoreDiv"><div class="score">SCORE: 0</div></div>
+                    <div class="moveDiv"><div class="move">MOVES: 0</div></div>
+                </div>
+            </div>
             <div class="button"><button class="start">START</button></div>
         </div>
     </body>
